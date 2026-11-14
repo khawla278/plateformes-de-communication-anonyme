@@ -1,0 +1,154 @@
+<div class="max-w-7xl mx-auto space-y-6 pb-12 font-sans">
+
+  <!-- Chargement -->
+  <div *ngIf="loading" class="flex items-center justify-center py-24">
+    <div class="w-10 h-10 border-4 border-blue-200 border-t-blue-600 rounded-full animate-spin"></div>
+  </div>
+
+  <!-- Erreur -->
+  <div *ngIf="error && !loading"
+    class="bg-red-50 border border-red-200 rounded-2xl p-6 text-center text-red-600 font-semibold">
+    Erreur lors du chargement des données.
+  </div>
+
+  <ng-container *ngIf="!loading && !error">
+
+    <!-- ===================== STATS CARDS ===================== -->
+    <div class="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-4">
+      <div *ngFor="let stat of stats"
+        class="bg-white border border-gray-100 shadow-sm rounded-2xl p-5 flex items-center gap-4 hover:shadow-md transition-all group">
+        <div [class]="'w-14 h-14 rounded-2xl flex items-center justify-center transition-all group-hover:scale-110 ' + stat.bg">
+          <mat-icon [class]="stat.color" style="font-size: 28px; width: 28px; height: 28px;">
+            {{ stat.icon }}
+          </mat-icon>
+        </div>
+        <div>
+          <p class="text-gray-400 text-xs font-bold tracking-wider uppercase mb-1">{{ stat.label }}</p>
+          <h3 class="text-3xl font-bold text-gray-900 leading-none">{{ stat.value }}</h3>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== ROW 1 : Users Chart + Moderators ===================== -->
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+
+      <!-- Users Line Chart -->
+      <div class="lg:col-span-2 bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+        <div class="flex items-start justify-between mb-6">
+          <div>
+            <h3 class="text-lg font-bold text-gray-900">Utilisateurs inscrits</h3>
+            <p class="text-sm text-gray-400 mt-1">Évolution des inscriptions</p>
+          </div>
+          <div class="flex bg-gray-100 p-1 rounded-lg">
+            <button (click)="setUsersTab('semaine')"
+              class="px-4 py-1.5 text-sm font-medium rounded-md transition-all"
+              [class]="activeUsersTab === 'semaine'
+                ? 'bg-blue-600 text-white shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'">
+              Semaine
+            </button>
+            <button (click)="setUsersTab('mois')"
+              class="px-4 py-1.5 text-sm font-medium rounded-md transition-all"
+              [class]="activeUsersTab === 'mois'
+                ? 'bg-blue-600 text-white shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'">
+              Mois
+            </button>
+          </div>
+        </div>
+        <div style="height: 280px; position: relative;">
+          <canvas id="usersChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Moderators List -->
+      <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6 flex flex-col">
+        <div class="flex items-center justify-between mb-6">
+          <h3 class="text-lg font-bold text-gray-900">Modérateurs</h3>
+          <a routerLink="/admin/users"
+            class="text-sm font-semibold text-blue-600 hover:text-blue-800 transition-colors">
+            Voir tout
+          </a>
+        </div>
+
+        <div class="flex-1 space-y-3 overflow-auto">
+          <div *ngFor="let mod of moderateurs.slice(0, 5)"
+            class="flex items-center gap-3 p-3 rounded-xl hover:bg-slate-50 transition-colors">
+            <div class="w-9 h-9 rounded-full bg-amber-50 text-amber-600 border border-amber-100
+                        flex items-center justify-center font-bold text-xs flex-shrink-0">
+              {{ (mod.name || mod.pseudo)?.charAt(0) | uppercase }}
+            </div>
+            <div class="min-w-0 flex-1">
+              <p class="font-bold text-gray-900 text-sm truncate">{{ mod.name || mod.pseudo }}</p>
+              <p class="text-xs text-gray-400 truncate">{{ mod.email }}</p>
+            </div>
+            <span class="inline-flex px-2 py-0.5 rounded-full text-[10px] font-bold uppercase"
+              [ngClass]="{
+                'bg-green-50 text-green-600': mod.status === 'actif' || !mod.status,
+                'bg-red-50 text-red-600': mod.status === 'suspendu'
+              }">
+              {{ mod.status || 'actif' }}
+            </span>
+          </div>
+
+          <div *ngIf="moderateurs.length === 0"
+            class="text-center text-gray-400 text-sm py-8">
+            Aucun modérateur
+          </div>
+        </div>
+      </div>
+    </div>
+
+    <!-- ===================== ROW 2 : Posts Chart + Doughnut ===================== -->
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-6">
+
+      <!-- Posts Bar Chart -->
+      <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+        <div class="flex items-start justify-between mb-6">
+          <div>
+            <h3 class="text-lg font-bold text-gray-900">Publications</h3>
+            <p class="text-sm text-gray-400 mt-1">Évolution des posts publiés</p>
+          </div>
+          <div class="flex bg-gray-100 p-1 rounded-lg">
+            <button (click)="setPostsTab('semaine')"
+              class="px-4 py-1.5 text-sm font-medium rounded-md transition-all"
+              [class]="activePostsTab === 'semaine'
+                ? 'bg-purple-600 text-white shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'">
+              Semaine
+            </button>
+            <button (click)="setPostsTab('mois')"
+              class="px-4 py-1.5 text-sm font-medium rounded-md transition-all"
+              [class]="activePostsTab === 'mois'
+                ? 'bg-purple-600 text-white shadow-sm'
+                : 'text-gray-600 hover:text-gray-900'">
+              Mois
+            </button>
+          </div>
+        </div>
+        <div style="height: 280px; position: relative;">
+          <canvas id="postsChart"></canvas>
+        </div>
+      </div>
+
+      <!-- Category Doughnut -->
+      <div class="bg-white border border-gray-100 shadow-sm rounded-2xl p-6">
+        <div class="mb-6">
+          <h3 class="text-lg font-bold text-gray-900">Répartition par catégorie</h3>
+          <p class="text-sm text-gray-400 mt-1">Distribution des posts</p>
+        </div>
+
+        <div *ngIf="categoriesPercent.length > 0" style="height: 280px; position: relative;">
+          <canvas id="categoryChart"></canvas>
+        </div>
+
+        <div *ngIf="categoriesPercent.length === 0"
+          class="flex items-center justify-center h-64 text-gray-400 text-sm">
+          Aucune donnée disponible
+        </div>
+      </div>
+
+    </div>
+
+  </ng-container>
+</div>

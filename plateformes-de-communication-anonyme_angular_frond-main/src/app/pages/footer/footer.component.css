@@ -1,0 +1,158 @@
+.ff {
+  background: #0f172a;
+  border-top: 0.5px solid #1e293b;
+  padding: 2.5rem 2rem 1.5rem;
+}
+
+/* BRAND */
+.ff-brand {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  margin-bottom: 2rem;
+}
+
+.ff-brand-icon {
+  width: 42px;
+  height: 42px;
+  border-radius: 8px;
+  background: #1e3a5f;
+  border: 0.5px solid rgba(37, 99, 235, 0.27);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.ff-brand-icon i {
+  font-size: 20px;
+  color: #60a5fa;
+}
+
+.ff-brand-name {
+  font-size: 16px;
+  font-weight: 500;
+  color: #f1f5f9;
+  margin: 0;
+}
+
+.ff-brand-sub {
+  font-size: 13px;
+  color: #64748b;
+  margin: 2px 0 0;
+}
+
+/* GRID */
+.ff-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+/* COLUMN LABEL */
+.ff-col-label {
+  font-size: 11px;
+  font-weight: 500;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  color: #3b82f6;
+  margin: 0 0 14px;
+  display: flex;
+  align-items: center;
+  gap: 6px;
+}
+
+.ff-col-label i {
+  font-size: 14px;
+}
+
+.ff-col-desc {
+  font-size: 14px;
+  color: #94a3b8;
+  margin: 0;
+  line-height: 1.6;
+}
+
+/* LIST */
+.ff-col ul {
+  list-style: none;
+  padding: 0;
+  margin: 0;
+}
+
+.ff-col li {
+  margin-bottom: 9px;
+}
+
+.ff-col a {
+  font-size: 14px;
+  color: #94a3b8;
+  text-decoration: none;
+  transition: color 0.15s;
+}
+
+.ff-col a:hover {
+  color: #60a5fa;
+}
+
+/* RULES */
+.ff-rule-item {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  font-size: 14px;
+  color: #94a3b8;
+  margin-bottom: 9px;
+}
+
+.ff-rule-item i {
+  font-size: 15px;
+  color: #3b82f6;
+}
+
+/* DIVIDER */
+.ff-divider {
+  border: none;
+  border-top: 0.5px solid #1e293b;
+  margin: 0 0 1.25rem;
+}
+
+.ff-bottom {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 0 2rem;
+}
+
+.ff-bottom-copy {
+  font-size: 13px;
+  color: #475569;
+  margin: 0;
+  text-align: center;
+  width: 100%;
+}
+
+.ff-bottom-badge {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  font-size: 12px;
+  color: #64748b;
+  background: #1e293b;
+  border: 0.5px solid #334155;
+  border-radius: 8px;
+  padding: 4px 10px;
+}
+
+.ff-bottom-badge i {
+  font-size: 13px;
+  color: #22c55e;
+}
+
+/* RESPONSIVE */
+@media (max-width: 768px) {
+  .ff-grid {
+    grid-template-columns: 1fr 1fr;
+  }
+
+}
